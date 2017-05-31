@@ -58,9 +58,13 @@ class Login extends CI_Controller {
 
     public function switch_language() {
         try {
+            $referer = $this->agent->referrer();
+            $redirect = strstr($referer, "generate_report", TRUE);
+            if (!$redirect)
+                $redirect = $this->agent->referrer();
             $language = empty($this->session->userdata('language')) || $this->session->userdata('language') == "english" ? "french" : "english";
             $this->session->set_userdata('language', $language);
-            redirect($this->agent->referrer());
+            redirect($redirect, 'refresh');
         } catch (Exception $ex) {
             
         }
